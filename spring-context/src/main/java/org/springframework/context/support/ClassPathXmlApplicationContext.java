@@ -44,7 +44,7 @@ import org.springframework.util.Assert;
  * for more flexible context setup.</b>
  *
  * @author Rod Johnson
- * @author Juergen Hoeller
+ * @author Juergen hoeller
  * @see #getResource
  * @see #getResourceByPath
  * @see GenericApplicationContext
