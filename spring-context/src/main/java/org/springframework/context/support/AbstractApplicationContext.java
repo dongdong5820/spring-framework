@@ -517,40 +517,63 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	public void refresh() throws BeansException, IllegalStateException {
 		synchronized (this.startupShutdownMonitor) {
 			// Prepare this context for refreshing.
+			/**
+			 * 前戏，做容器刷新前的准备工作
+			 * 1、设置容器的启动时间
+			 * 2、设置关闭状态为false
+			 * 3、设置活跃状态为true
+			 * 4、获取Environment对象，并加载当前系统的的属性值到Environment对象中
+			 * 5、准备监听器和事件的集合对象，默认为空的集合
+			 */
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
+			/**
+			 * 告诉子类刷新内部bean工厂，获取bean工厂
+			 * 创建容器对象: DefaultListableBeanFactory
+			 * 加载xml配置文件的属性值到当前工厂中，最重要的是BeanDefinition
+			 */
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
+			// 准备bean工厂
 			prepareBeanFactory(beanFactory);
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
+				// 准备beanFactory完成后的后置处理
 				postProcessBeanFactory(beanFactory);
 
 				// Invoke factory processors registered as beans in the context.
+				// 执行beanFactory后置处理(所有的bean信息将在这个地方注册进beanFactory中)
 				invokeBeanFactoryPostProcessors(beanFactory);
 
 				// Register bean processors that intercept bean creation.
+				// 注册bean后置处理
 				registerBeanPostProcessors(beanFactory);
 
 				// Initialize message source for this context.
+				// 初始化MessageSource
 				initMessageSource();
 
 				// Initialize event multicaster for this context.
+				// 初始化事件控制器
 				initApplicationEventMulticaster();
 
 				// Initialize other special beans in specific context subclasses.
+				// 初始化其他特别的bean信息
 				onRefresh();
 
 				// Check for listener beans and register them.
+				// 注册监听器
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
+				// 初始化所有非懒加载的bean
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.
+				// 完成容器创建
 				finishRefresh();
 			}
 
